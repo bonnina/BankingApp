@@ -20,6 +20,13 @@ namespace BankingApp.Controllers
             return View();
         }
 
+        public IActionResult Contact()
+        {
+            ViewData["Message"] = "Send us a message";
+
+            return View();
+        }
+
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()
         {
