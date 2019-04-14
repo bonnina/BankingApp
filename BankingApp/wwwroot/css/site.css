@@ -8,6 +8,10 @@ a.navbar-brand {
   word-break: break-all;
 }
 
+.margin-top-20 {
+    margin-top: 20px;
+}
+
 /* Sticky footer styles
 -------------------------------------------------- */
 html {
