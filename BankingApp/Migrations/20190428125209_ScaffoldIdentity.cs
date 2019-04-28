@@ -2,9 +2,9 @@
 using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Migrations;
 
-namespace BankingApp.Data.Migrations
+namespace BankingApp.Migrations
 {
-    public partial class CreateIdentitySchema : Migration
+    public partial class ScaffoldIdentity : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
