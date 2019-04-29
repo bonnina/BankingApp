@@ -11,10 +11,17 @@ namespace BankingApp.Models
 {
     public class BankingAppContext : IdentityDbContext<BankingAppUser>
     {
+        public BankingAppContext()
+            : base()
+        {
+        }
+
         public BankingAppContext(DbContextOptions<BankingAppContext> options)
             : base(options)
         {
         }
+
+        public DbSet<CheckingAccount> CheckingAccounts { get; set; }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
