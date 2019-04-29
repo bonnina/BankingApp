@@ -3,13 +3,15 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using System.ComponentModel.DataAnnotations;
+using BankingApp.Areas.Identity.Data;
 
 namespace BankingApp.Models
 {
     public class CheckingAccount
     {
         [Required]
-        [RegularExpression(@"\d{6,10}", ErrorMessage = "Account number should be between 6 and 10 digits")]
+        [StringLength(10)]
+      //  [RegularExpression(@"\d{6,10}", ErrorMessage = "Account number should be between 6 and 10 digits")]
         public int Id { get; set; }
 
         [Required]
@@ -30,5 +32,10 @@ namespace BankingApp.Models
 
         [DataType(DataType.Currency)]
         public decimal Balance { get; set; }
+
+        public virtual BankingAppUser User { get; set; }
+
+        [Required]
+        public string BankingAppUserId { get; set; }
     }
 }
