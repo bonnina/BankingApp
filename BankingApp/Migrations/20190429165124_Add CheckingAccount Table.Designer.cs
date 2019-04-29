@@ -4,14 +4,16 @@ using BankingApp.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace BankingApp.Migrations
 {
     [DbContext(typeof(BankingAppContext))]
-    partial class BankingAppContextModelSnapshot : ModelSnapshot
+    [Migration("20190429165124_Add CheckingAccount Table")]
+    partial class AddCheckingAccountTable
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
