@@ -23,17 +23,20 @@ namespace BankingApp.Areas.Identity.Pages.Account
         private readonly UserManager<BankingAppUser> _userManager;
         private readonly ILogger<RegisterModel> _logger;
         private readonly IEmailSender _emailSender;
+        private readonly BankingAppContext _context;
 
         public RegisterModel(
             UserManager<BankingAppUser> userManager,
             SignInManager<BankingAppUser> signInManager,
             ILogger<RegisterModel> logger,
-            IEmailSender emailSender)
+            IEmailSender emailSender,
+            BankingAppContext context)
         {
             _userManager = userManager;
             _signInManager = signInManager;
             _logger = logger;
             _emailSender = emailSender;
+            _context = context;
         }
 
         [BindProperty]
@@ -90,39 +93,37 @@ namespace BankingApp.Areas.Identity.Pages.Account
                 var result = await _userManager.CreateAsync(user, Input.Password);
                 if (result.Succeeded)
                 {
-                    using (var db = new BankingAppContext())
+                   // using (var db = new BankingAppContext()) {
+                    var accountNumber = (11112222 + await _context.CheckingAccounts.CountAsync())
+                        .ToString()
+                        .PadLeft(10, '0');
+
+                    var checkingAccount = new CheckingAccount
                     {
-                        var accountNumber = (11112222 + await db.CheckingAccounts.CountAsync())
-                            .ToString()
-                            .PadLeft(10, '0');
+                        FirstName = Input.FirstName,
+                        LastName = Input.LastName,
+                        AccountNumber = accountNumber,
+                        Balance = 0,
+                        BankingAppUserId = user.Id
+                    };
 
-                        var checkingAccount = new CheckingAccount
-                        {
-                            FirstName = Input.FirstName,
-                            LastName = Input.LastName,
-                            AccountNumber = accountNumber,
-                            Balance = 0,
-                            BankingAppUserId = user.Id
-                        };
+                    _context.CheckingAccounts.Add(checkingAccount);
+                    _context.SaveChanges();
 
-                        db.CheckingAccounts.Add(checkingAccount);
-                        db.SaveChanges();
+                    _logger.LogInformation("User created a new account with password.");
 
-                        _logger.LogInformation("User created a new account with password.");
+                    var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
+                    var callbackUrl = Url.Page(
+                        "/Account/ConfirmEmail",
+                        pageHandler: null,
+                        values: new { userId = user.Id, code = code },
+                        protocol: Request.Scheme);
 
-                        var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
-                        var callbackUrl = Url.Page(
-                            "/Account/ConfirmEmail",
-                            pageHandler: null,
-                            values: new { userId = user.Id, code = code },
-                            protocol: Request.Scheme);
+                    await _emailSender.SendEmailAsync(Input.Email, "Confirm your email",
+                        $"Please confirm your account by <a href='{HtmlEncoder.Default.Encode(callbackUrl)}'>clicking here</a>.");
 
-                        await _emailSender.SendEmailAsync(Input.Email, "Confirm your email",
-                            $"Please confirm your account by <a href='{HtmlEncoder.Default.Encode(callbackUrl)}'>clicking here</a>.");
-
-                        await _signInManager.SignInAsync(user, isPersistent: false);
-                        return LocalRedirect(returnUrl);
-                    }
+                    await _signInManager.SignInAsync(user, isPersistent: false);
+                    return LocalRedirect(returnUrl);
                 }
                 foreach (var error in result.Errors)
                 {
