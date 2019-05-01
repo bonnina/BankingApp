@@ -5,13 +5,30 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using BankingApp.Models;
+using BankingApp.Areas.Identity.Data;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Authorization;
 
 namespace BankingApp.Controllers
 {
     public class HomeController : Controller
     {
+        private readonly UserManager<BankingAppUser> _userManager;
+        private readonly BankingAppContext _context;
+
+        [Authorize]
         public IActionResult Index()
         {
+            var user = _userManager.FindByIdAsync(User.Identity.Name);
+            var userId = _userManager.GetUserId(HttpContext.User);
+
+            var checkingAccountId = _context.CheckingAccounts
+                .Where(c => c.BankingAppUserId == userId)
+                .First()
+                .Id;
+
+            ViewData["CheckingAccountId"] = checkingAccountId;
+
             return View();
         }
 
