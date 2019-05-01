@@ -6,6 +6,7 @@ using BankingApp.Areas.Identity.Data;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+using BankingApp.Models;
 
 namespace BankingApp.Models
 {
@@ -30,5 +31,7 @@ namespace BankingApp.Models
             // For example, you can rename the ASP.NET Identity table names and more.
             // Add your customizations after calling base.OnModelCreating(builder);
         }
+
+        public DbSet<BankingApp.Models.Transaction> Transactions { get; set; }
     }
 }
