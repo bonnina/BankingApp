@@ -37,5 +37,7 @@ namespace BankingApp.Models
 
         [Required]
         public string BankingAppUserId { get; set; }
+
+        public virtual ICollection<Transaction> Transactions { get; set; }
     }
 }
