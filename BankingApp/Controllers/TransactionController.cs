@@ -13,6 +13,11 @@ namespace BankingApp.Controllers
     {
         private readonly BankingAppContext _context;
 
+        public TransactionController(BankingAppContext context)
+        {
+            _context = context;
+        }
+
         // GET: Transaction/Deposit
         public IActionResult Deposit(int CheckingAccountId)
         {

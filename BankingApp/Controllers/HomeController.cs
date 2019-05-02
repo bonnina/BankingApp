@@ -16,6 +16,12 @@ namespace BankingApp.Controllers
         private readonly UserManager<BankingAppUser> _userManager;
         private readonly BankingAppContext _context;
 
+        public HomeController(BankingAppContext context, UserManager<BankingAppUser> userManager)
+        {
+            _context = context;
+            _userManager = userManager;
+        }
+
         [Authorize]
         public IActionResult Index()
         {
