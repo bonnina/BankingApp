@@ -13,6 +13,7 @@ using Microsoft.Extensions.Logging;
 using BankingApp.Areas.Identity;
 using Microsoft.EntityFrameworkCore;
 using BankingApp.Models;
+using BankingApp.Services;
 
 namespace BankingApp.Areas.Identity.Pages.Account
 {
@@ -93,23 +94,9 @@ namespace BankingApp.Areas.Identity.Pages.Account
                 var result = await _userManager.CreateAsync(user, Input.Password);
                 if (result.Succeeded)
                 {
-                   // using (var db = new BankingAppContext()) {
-                    var accountNumber = (11112222 + await _context.CheckingAccounts.CountAsync())
-                        .ToString()
-                        .PadLeft(10, '0');
-
-                    var checkingAccount = new CheckingAccount
-                    {
-                        FirstName = Input.FirstName,
-                        LastName = Input.LastName,
-                        AccountNumber = accountNumber,
-                        Balance = 0,
-                        BankingAppUserId = user.Id
-                    };
-
-                    _context.CheckingAccounts.Add(checkingAccount);
-                    _context.SaveChanges();
-
+                    var service = new CheckingAccountService(_context);
+                    service.CreateCheckingAccount(Input.FirstName, Input.LastName, user.Id, 0);
+               
                     _logger.LogInformation("User created a new account with password.");
 
                     var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);

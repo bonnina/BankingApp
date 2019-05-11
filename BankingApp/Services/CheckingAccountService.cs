@@ -30,7 +30,7 @@ namespace BankingApp.Services
             };
 
             _context.CheckingAccounts.Add(checkingAccount);
-                        _context.SaveChanges();
+            _context.SaveChanges();
         }
     }
 }
