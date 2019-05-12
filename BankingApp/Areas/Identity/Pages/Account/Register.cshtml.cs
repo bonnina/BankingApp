@@ -14,6 +14,7 @@ using BankingApp.Areas.Identity;
 using Microsoft.EntityFrameworkCore;
 using BankingApp.Models;
 using BankingApp.Services;
+using System.Security.Claims;
 
 namespace BankingApp.Areas.Identity.Pages.Account
 {
@@ -94,6 +95,9 @@ namespace BankingApp.Areas.Identity.Pages.Account
                 var result = await _userManager.CreateAsync(user, Input.Password);
                 if (result.Succeeded)
                 {
+                    await _userManager.AddClaimAsync(user, 
+                        new Claim(ClaimTypes.GivenName, Input.FirstName));
+
                     var service = new CheckingAccountService(_context);
                     service.CreateCheckingAccount(Input.FirstName, Input.LastName, user.Id, 0);
                

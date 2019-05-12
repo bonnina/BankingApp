@@ -1,11 +1,15 @@
 @using Microsoft.AspNetCore.Identity
 @using BankingApp.Areas.Identity.Data
+@*@using System.Security.Claims*@
 @inject SignInManager<BankingAppUser> signInManager
 @inject UserManager<BankingAppUser> userManager
 
 <ul class="navbar-nav">
 @if (signInManager.IsSignedIn(User))
 {
+    //var identity = (ClaimsIdentity)User.Identity;
+    //var name = identity.FindFirst(ClaimTypes.GivenName);
+
     <li class="nav-item">
         <a  class="nav-link text-dark" asp-area="Identity" asp-page="/Account/Manage/Index" title="Manage">Hello @User.Identity.Name!</a>
     </li>
