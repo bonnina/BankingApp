@@ -5,11 +5,22 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using BankingApp.Models;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
+using System.Security.Claims;
 
 namespace BankingApp.Controllers
 {
+    [Authorize]
     public class CheckingAccountController : Controller
     {
+        private readonly BankingAppContext _context;
+
+        public CheckingAccountController(BankingAppContext context)
+        {
+            _context = context;
+        }
+
         // GET: CheckingAccount
         public ActionResult Index()
         {
@@ -19,13 +30,18 @@ namespace BankingApp.Controllers
         // GET: CheckingAccount/Details/5
         public ActionResult Details()
         {
-            var checkingAccount = new CheckingAccount
-            {
-                AccountNumber = "0000111122223333",
-                FirstName = "John",
-                LastName = "Doe",
-                Balance = 500
-            };
+            var userId = User.FindFirst(ClaimTypes.NameIdentifier).Value;
+
+            //var checkingAccount = new CheckingAccount
+            //{
+            //    AccountNumber = "0000111122223333",
+            //    FirstName = "John",
+            //    LastName = "Doe",
+            //    Balance = 500
+            //};
+
+            var checkingAccount = _context.CheckingAccounts.Where(c => c.BankingAppUserId == userId).First();
+
             return View(checkingAccount);
         }
 
