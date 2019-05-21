@@ -45,6 +45,15 @@ namespace BankingApp.Controllers
             return View(checkingAccount);
         }
 
+        [Authorize(Roles = "Admin")]
+        public ActionResult DetailsForAdmin(int id)
+        {
+            var checkingAccount = _context.CheckingAccounts.Find(id);
+
+            return View("Details", checkingAccount);
+        }
+
+        [Authorize(Roles = "Admin")]
         public ActionResult List()
         {
             return View(_context.CheckingAccounts.ToList());
