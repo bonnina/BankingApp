@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
@@ -19,7 +18,7 @@ namespace BankingApp.Models
              _userManager = userManager;
         }
 
-        public async static void Initialize(IServiceProvider serviceProvider)
+        public async Task Initialize(IServiceProvider serviceProvider)
         {
             using (var context = new BankingAppContext(
                serviceProvider.GetRequiredService<DbContextOptions<BankingAppContext>>()))
@@ -30,7 +29,7 @@ namespace BankingApp.Models
                         UserName = "admin@gmail.com",
                         Email = "admin@gmail.com"};
 
-                    _userManager.Create(user, "passW0rd");
+                    await _userManager.CreateAsync(user, "passW0rd");
 
                     var service = new CheckingAccountService(context);
                     service.CreateCheckingAccount("admin", "user", user.Id, 1000);
