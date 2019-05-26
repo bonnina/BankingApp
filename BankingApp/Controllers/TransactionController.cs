@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using BankingApp.Models;
 using Microsoft.AspNetCore.Authorization;
+using BankingApp.Services;
 
 namespace BankingApp.Controllers
 {
@@ -30,7 +31,10 @@ namespace BankingApp.Controllers
             if (ModelState.IsValid)
             {
                 _context.Transactions.Add(transaction);
-                _context.SaveChanges();
+              //  _context.SaveChanges();
+
+                var service = new CheckingAccountService(_context);
+                service.UpdateBalance(transaction.CheckingAccountId);
 
                 return RedirectToAction("Index", "Home");
             }
