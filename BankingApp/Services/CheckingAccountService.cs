@@ -1,6 +1,7 @@
 ﻿using System;
 using Microsoft.EntityFrameworkCore;
 using BankingApp.Models;
+using System.Linq;
 
 namespace BankingApp.Services
 {
@@ -30,6 +31,19 @@ namespace BankingApp.Services
             };
 
             _context.CheckingAccounts.Add(checkingAccount);
+            _context.SaveChanges();
+        }
+
+        public void UpdateBalance(int checkingAccountId)
+        {
+            var checkingAccount = _context.CheckingAccounts
+                .Where(c => c.Id == checkingAccountId)
+                .First();
+
+            checkingAccount.Balance = _context.Transactions
+                .Where(c => c.Id == checkingAccountId)
+                .Sum(c => c.Amount);
+
             _context.SaveChanges();
         }
     }
