@@ -4,7 +4,7 @@
 
 <h2>@ViewData["Title"]</h2>
 
-<div class="text-left">
+<div id="text-left">
     <address>
         YourBanking <br />
         Rochester, NY, 14638 <br />
@@ -15,10 +15,19 @@
         </strong>
     </address>
 
-
-    <h4>@ViewData["Message"]</h4>
-    <form method="post">
-        <textarea name="message"></textarea>
-        <input type="submit" value="Send" />
-    </form>
+    <div id="formSection">
+        <h4>@ViewData["Message"]</h4>
+        <form 
+        data-ajax="true" 
+        data-ajax-method="POST" 
+        data-ajax-mode="replace" 
+        data-ajax-update="#formSection" >
+            <textarea name="message"></textarea>
+            <input type="submit" value="Send" />
+        </form>
+    </div>
 </div>
+
+@section scripts {
+    <script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js"></script>
+}
