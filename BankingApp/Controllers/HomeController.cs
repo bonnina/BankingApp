@@ -55,7 +55,7 @@ namespace BankingApp.Controllers
         {
             ViewData["Message"] = "Thanks, your message was sent.";
 
-            return View();
+            return PartialView("_ContactResponse");
         }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
