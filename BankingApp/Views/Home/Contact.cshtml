@@ -18,10 +18,11 @@
     <div id="formSection">
         <h4>@ViewData["Message"]</h4>
         <form 
-        data-ajax="true" 
-        data-ajax-method="POST" 
-        data-ajax-mode="replace" 
-        data-ajax-update="#formSection" >
+         action="/Home/Contact"
+         data-ajax="true" 
+         data-ajax-method="POST" 
+         data-ajax-mode="replace" 
+         data-ajax-update="#formSection" >
             <textarea name="message"></textarea>
             <input type="submit" value="Send" />
         </form>
