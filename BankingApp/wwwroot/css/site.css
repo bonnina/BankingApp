@@ -1,7 +1,4 @@
-﻿/* Please see documentation at https://docs.microsoft.com/aspnet/core/client-side/bundling-and-minification
-for details on configuring this project to bundle and minify static web assets. */
-@import url('https://fonts.googleapis.com/css?family=Comfortaa|Fredoka+One');
-
+﻿
 a.navbar-brand {
   white-space: normal;
   text-align: center;
@@ -12,10 +9,28 @@ a.navbar-brand {
     margin-top: 20px;
 }
 
+#formSection {
+    text-align: left;
+    position: absolute;
+    left: 15vw;
+}
+
+textarea {
+    width: 50vw;
+    height: 100px;
+    margin-top: 10px;
+}
+
+#send_btn {
+    color: #ffffff;
+    width: 80px;
+    margin: 10px;
+}
+
 /* Sticky footer styles
 -------------------------------------------------- */
 html {
-  font-size: 14px;
+    font-size: 14px;
 }
 @media (min-width: 768px) {
   html {
