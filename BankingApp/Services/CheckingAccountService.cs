@@ -1,11 +1,11 @@
-﻿using System;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using BankingApp.Models;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace BankingApp.Services
 {
-    public class CheckingAccountService
+    public class CheckingAccountService: ICheckingAccountService
     {
         private readonly BankingAppContext _context;
 
@@ -14,10 +14,13 @@ namespace BankingApp.Services
             _context = context;
         }
 
-        public async void CreateCheckingAccount(string firstName, string lastName, string userId, 
+        public async Task CreateCheckingAccount(
+            string firstName, 
+            string lastName, 
+            string userId, 
             decimal initialBalance = 0)
         {
-            var accountNumber = (11112222 + await _context.CheckingAccounts.CountAsync())
+            string accountNumber = (11112222 + await _context.CheckingAccounts.CountAsync())
                            .ToString()
                            .PadLeft(10, '0');
 
@@ -31,20 +34,19 @@ namespace BankingApp.Services
             };
 
             _context.CheckingAccounts.Add(checkingAccount);
-            _context.SaveChanges();
+            await _context.SaveChangesAsync();
         }
 
-        public void UpdateBalance(int checkingAccountId)
+        public async Task UpdateBalance(int checkingAccountId)
         {
-            var checkingAccount = _context.CheckingAccounts
-                .Where(c => c.Id == checkingAccountId)
-                .First();
+            CheckingAccount checkingAccount = await _context.CheckingAccounts
+                .FirstAsync(c => c.Id == checkingAccountId);
 
-            checkingAccount.Balance = _context.Transactions
+            checkingAccount.Balance = await _context.Transactions
                 .Where(c => c.Id == checkingAccountId)
-                .Sum(c => c.Amount);
+                .SumAsync(c => c.Amount);
 
-            _context.SaveChanges();
+            await _context.SaveChangesAsync();
         }
     }
 }
