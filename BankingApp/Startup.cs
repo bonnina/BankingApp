@@ -1,19 +1,16 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.UI;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using BankingApp.Areas.Identity.Data;
 using BankingApp.Models;
+using BankingApp.Services;
 
 namespace BankingApp
 {
@@ -38,8 +35,15 @@ namespace BankingApp
                 options.UseSqlServer(
                     Configuration.GetConnectionString("DefaultConnection")));
 
+            #region Dependency Injection
+
+            services.AddScoped<ICheckingAccountService, CheckingAccountService>();
+
+            #endregion
+
             services.AddDefaultIdentity<BankingAppUser>()
                 .AddDefaultUI(UIFramework.Bootstrap4)
+                .AddRoles<IdentityRole>()
                 .AddEntityFrameworkStores<BankingAppContext>();
 
             services.Configure<IdentityOptions>(options =>
