@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using BankingApp.Models;
 using Microsoft.AspNetCore.Authorization;
@@ -13,10 +10,14 @@ namespace BankingApp.Controllers
     public class TransactionController : Controller
     {
         private readonly BankingAppContext _context;
+        private readonly ICheckingAccountService _checkingAccountService;
 
-        public TransactionController(BankingAppContext context)
+        public TransactionController(
+            BankingAppContext context,
+             ICheckingAccountService checkingAccountService)
         {
             _context = context;
+            _checkingAccountService = checkingAccountService;
         }
 
         // GET: Transaction/Deposit
@@ -26,18 +27,18 @@ namespace BankingApp.Controllers
         }
 
         [HttpPost]
-        public IActionResult Deposit(Transaction transaction)
+        public async Task<IActionResult> Deposit(Transaction transaction)
         {
             if (ModelState.IsValid)
             {
                 _context.Transactions.Add(transaction);
-              //  _context.SaveChanges();
+                await _context.SaveChangesAsync();
 
-                var service = new CheckingAccountService(_context);
-                service.UpdateBalance(transaction.CheckingAccountId);
+                await _checkingAccountService.UpdateBalance(transaction.CheckingAccountId); 
 
                 return RedirectToAction("Index", "Home");
             }
+
             return View();
         }
     }
