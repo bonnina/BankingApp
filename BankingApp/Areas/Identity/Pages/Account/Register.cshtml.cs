@@ -24,14 +24,16 @@ namespace BankingApp.Areas.Identity.Pages.Account
         private readonly ICheckingAccountService _checkingAccountService;
 
         public RegisterModel(
-            UserManager<BankingAppUser> userManager,
             SignInManager<BankingAppUser> signInManager,
+            UserManager<BankingAppUser> userManager,
+            RoleManager<IdentityRole> roleManager,
             ILogger<RegisterModel> logger,
             IEmailSender emailSender,
             ICheckingAccountService checkingAccountService)
         {
-            _userManager = userManager;
             _signInManager = signInManager;
+            _userManager = userManager;
+            _roleManager = roleManager;
             _logger = logger;
             _emailSender = emailSender;
             _checkingAccountService = checkingAccountService;
