@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.DependencyInjection;
 using BankingApp.Areas.Identity.Data;
 using Microsoft.AspNetCore.Identity;
 using BankingApp.Services;
@@ -12,35 +12,56 @@ namespace BankingApp.Models
     public class Seed
     {
         private readonly UserManager<BankingAppUser> _userManager;
+        private readonly RoleManager<IdentityRole> _roleManager;
         private readonly ICheckingAccountService _checkingAccountService;
+        private readonly BankingAppContext _context;
 
-        public Seed (UserManager<BankingAppUser> userManager, ICheckingAccountService checkingAccountService)
+        public Seed (UserManager<BankingAppUser> userManager, 
+            ICheckingAccountService checkingAccountService,
+             BankingAppContext context,
+            RoleManager<IdentityRole> roleManager)
         {
             _userManager = userManager;
             _checkingAccountService = checkingAccountService;
+            _context = context;
+            _roleManager = roleManager;
         }
 
         public async Task Initialize(IServiceProvider serviceProvider)
         {
-            using (var context = new BankingAppContext(
-                serviceProvider.GetRequiredService<DbContextOptions<BankingAppContext>>()))
+            if (!await _context.Users.AnyAsync(u => u.UserName == "admin@gmail.com"))
             {
-                if (!context.Users.Any(u => u.UserName == "admin@gmail.com"))
+                var user = new BankingAppUser
                 {
-                    var user = new BankingAppUser
+                    UserName = "admin@gmail.com",
+                    Email = "admin@gmail.com",
+                    FirstName = "Admin",
+                    LastName = "Admin",
+                    SecurityStamp = Guid.NewGuid().ToString()
+                };
+
+                IdentityResult result = await _userManager.CreateAsync(user, "DonaldTrump2016!");
+                if (result.Succeeded)
+                {
+                    await _userManager.AddClaimAsync(user,
+                        new Claim(ClaimTypes.GivenName, user.FirstName));
+
+                    #region Add Admin if not exists
+
+                    if (!await _roleManager.RoleExistsAsync("Admin"))
                     {
-                        UserName = "admin@gmail.com",
-                        Email = "admin@gmail.com"
-                    };
+                        await _roleManager.CreateAsync(new IdentityRole { Name = "Admin" });
+                    }
 
-                    await _userManager.CreateAsync(user, "passW0rd");
+                    #endregion
 
-                    await _checkingAccountService.CreateCheckingAccount("admin", "user", user.Id, 1000);
-
-                    context.Roles.Add(new IdentityRole {Name = "Admin"});
-                    context.SaveChanges();
+                    await _checkingAccountService.CreateCheckingAccount(user.FirstName, user.LastName, user.Id, 1000);
 
                     await _userManager.AddToRoleAsync(user, "Admin");
+                }
+                else
+                {
+                    throw new AggregateException(result.Errors.Select(e => new Exception(e.Description)));
                 }
             }
         }
