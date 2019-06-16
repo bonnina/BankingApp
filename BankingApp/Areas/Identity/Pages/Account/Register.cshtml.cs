@@ -115,12 +115,12 @@ namespace BankingApp.Areas.Identity.Pages.Account
 
                     #region Add Admin
 
-                    if (!await _roleManager.RoleExistsAsync("Admin"))
-                    {
-                        var role = new IdentityRole { Name = "Admin" };
-                        await _roleManager.CreateAsync(role);
-                        await _userManager.AddToRoleAsync(user, "Admin");
-                    }
+                    //if (!await _roleManager.RoleExistsAsync("Admin"))
+                    //{
+                    //    var role = new IdentityRole { Name = "Admin" };
+                    //    await _roleManager.CreateAsync(role);
+                    //    await _userManager.AddToRoleAsync(user, "Admin");
+                    //}
 
                     #endregion
 
