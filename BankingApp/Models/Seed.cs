@@ -27,7 +27,7 @@ namespace BankingApp.Models
             _roleManager = roleManager;
         }
 
-        public async Task Initialize(IServiceProvider serviceProvider)
+        public async Task Initialize()
         {
             if (!await _context.Users.AnyAsync(u => u.UserName == "admin@gmail.com"))
             {
