@@ -38,6 +38,7 @@ namespace BankingApp
             #region Dependency Injection
 
             services.AddScoped<ICheckingAccountService, CheckingAccountService>();
+            services.AddScoped<Seed, Seed>();
 
             #endregion
 
@@ -81,7 +82,7 @@ namespace BankingApp
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
         }
         
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env)
+        public void Configure(IApplicationBuilder app, IHostingEnvironment env, Seed seed)
         {
             if (env.IsDevelopment())
             {
@@ -100,6 +101,8 @@ namespace BankingApp
             app.UseCookiePolicy();
 
             app.UseAuthentication();
+
+            seed.Initialize().GetAwaiter().GetResult();
 
             app.UseMvc(routes =>
             {
