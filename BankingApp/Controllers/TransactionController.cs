@@ -3,6 +3,9 @@ using Microsoft.AspNetCore.Mvc;
 using BankingApp.Models;
 using Microsoft.AspNetCore.Authorization;
 using BankingApp.Services;
+using BankingApp.Areas.Identity.Data;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 
 namespace BankingApp.Controllers
 {
@@ -11,13 +14,16 @@ namespace BankingApp.Controllers
     {
         private readonly BankingAppContext _context;
         private readonly ICheckingAccountService _checkingAccountService;
+        private readonly UserManager<BankingAppUser> _userManager;
 
         public TransactionController(
             BankingAppContext context,
-             ICheckingAccountService checkingAccountService)
+             ICheckingAccountService checkingAccountService, 
+             UserManager<BankingAppUser> userManager)
         {
             _context = context;
             _checkingAccountService = checkingAccountService;
+            _userManager = userManager;
         }
 
         // GET: Transaction/Deposit
@@ -27,11 +33,27 @@ namespace BankingApp.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Deposit(Transaction transaction)
+        public async Task<IActionResult> Deposit(decimal amount)
         {
+            var user = _userManager.FindByIdAsync(User.Identity.Name);
+            var userId = _userManager.GetUserId(HttpContext.User);
+
+            var checkingAccount = (await _context.CheckingAccounts
+                .FirstAsync(c => c.BankingAppUserId == userId));
+
+            var checkingAccountId = checkingAccount.Id;
+
+            var transaction = new Transaction
+            {
+                Amount = amount,
+                CheckingAccountId = checkingAccountId,
+                CheckingAccount = checkingAccount
+            };
+
             if (ModelState.IsValid)
             {
                 _context.Transactions.Add(transaction);
+                
                 await _context.SaveChangesAsync();
 
                 await _checkingAccountService.UpdateBalance(transaction.CheckingAccountId); 
