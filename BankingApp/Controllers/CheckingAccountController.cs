@@ -32,14 +32,6 @@ namespace BankingApp.Controllers
         {
             var userId = User.FindFirst(ClaimTypes.NameIdentifier).Value;
 
-            //var checkingAccount = new CheckingAccount
-            //{
-            //    AccountNumber = "0000111122223333",
-            //    FirstName = "John",
-            //    LastName = "Doe",
-            //    Balance = 500
-            //};
-
             var checkingAccount = _context.CheckingAccounts.Where(c => c.BankingAppUserId == userId).First();
 
             return View(checkingAccount);
@@ -53,6 +45,7 @@ namespace BankingApp.Controllers
             return View("Details", checkingAccount);
         }
 
+        // GET: CheckingAccount/List
         [Authorize(Roles = "Admin")]
         public ActionResult List()
         {
