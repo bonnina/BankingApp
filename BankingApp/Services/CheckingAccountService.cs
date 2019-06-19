@@ -43,7 +43,7 @@ namespace BankingApp.Services
                 .FirstAsync(c => c.Id == checkingAccountId);
 
             checkingAccount.Balance = await _context.Transactions
-                .Where(c => c.Id == checkingAccountId)
+                .Where(c => c.CheckingAccountId == checkingAccountId)
                 .SumAsync(c => c.Amount);
 
             await _context.SaveChangesAsync();
