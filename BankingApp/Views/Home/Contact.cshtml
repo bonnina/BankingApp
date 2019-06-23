@@ -15,20 +15,33 @@
         </strong>
     </address>
 
-    <div id="formSection">
+    <div id="form_section">
         <h4>@ViewData["Message"]</h4>
-        <form 
-         action="/Home/Contact"
-         data-ajax="true" 
-         data-ajax-method="POST" 
-         data-ajax-mode="replace" 
-         data-ajax-update="#formSection" >
-            <textarea name="message"></textarea>
+        <form method="post" id="contact_form">
+            <textarea name="message" id="message"></textarea>
             <input id="send_btn" type="submit" value="Send" />
         </form>
+        <img src="~/images/loader.gif" 
+             id="progress" 
+             style="display:none" 
+             alt="loading..." 
+             class="img-responsive"
+        />
     </div>
 </div>
 
 @section scripts {
-    <script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js"></script>
+    <script>
+        $('contact_form').submit(() => {
+            $('#progress').show();
+
+            $.post('', {message: $('#message').val()})
+                .done(response => {
+                    setTimeout(() => {
+                        $('#message').html(response);
+                    }, 3000)
+                });
+            return false;
+        });
+    </script>
 }
