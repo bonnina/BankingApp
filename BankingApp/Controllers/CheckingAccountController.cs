@@ -52,8 +52,15 @@ namespace BankingApp.Controllers
             return View(_context.CheckingAccounts.ToList());
         }
 
-            // GET: CheckingAccount/Create
-            public ActionResult Create()
+        public ActionResult Statement(int id)
+        {
+            var checkingAccount = _context.CheckingAccounts.Find(id);
+
+            return View(checkingAccount.Transactions.ToList());
+        }
+
+        // GET: CheckingAccount/Create
+        public ActionResult Create()
         {
             return View();
         }
