@@ -18,24 +18,33 @@
     <div id="form_section">
         <h4>@ViewData["Message"]</h4>
         <form method="post" id="contact_form">
-            <textarea name="message" id="message"></textarea>
+            <textarea name="message" id="message" maxlength="150" data-bind="value:message"></textarea>
             <input id="send_btn" type="submit" value="Send" />
+            <span data-bind="text:charactersRemaining"></span>
         </form>
-        <img src="~/images/loader.gif" 
-             id="progress" 
-             style="display:none" 
-             alt="loading..." 
-             class="img-responsive"
-        />
+        <img src="~/images/loader.gif"
+             id="progress"
+             style="display:none"
+             alt="loading..."
+             class="img-responsive" />
     </div>
 </div>
 
 @section scripts {
+    @*<script>
+        function ContactViewModel() {
+            var self = this;
+            self.message = ko.observable('');
+            self.charactersRemaining = ko.computed(() => 150 - self.message().Length);
+        };
+        ko.applyBindings(new ContactViewModel());
+    </script>*@
+
     <script>
         $('contact_form').submit(() => {
             $('#progress').show();
 
-            $.post('', {message: $('#message').val()})
+            $.post('', { message: $('#message').val() })
                 .done(response => {
                     setTimeout(() => {
                         $('#message').html(response);
