@@ -1,8 +1,28 @@
-﻿
+﻿@model IEnumerable<BankingApp.Models.Transaction>
 @{
     ViewData["Title"] = "Statement";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h1>Statement</h1>
+<h2>Statement</h2>
+
+<table class="table table-bordered table-striped">
+    <thead>
+        <tr>
+            <td><strong>Transaction ID</strong></td>
+            <td><strong>Amount</strong></td>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td></td>
+            <td></td>
+        </tr>
+    </tbody>
+    <tfoot>
+        <tr>
+            <td></td>
+        </tr>
+    </tfoot>
+</table>
 
