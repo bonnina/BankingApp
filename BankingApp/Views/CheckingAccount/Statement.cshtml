@@ -9,19 +9,35 @@
 <table class="table table-bordered table-striped">
     <thead>
         <tr>
-            <td><strong>Transaction ID</strong></td>
-            <td><strong>Amount</strong></td>
+            <th>
+                <strong>Transaction ID</strong>
+                @Html.DisplayNameFor(model => model.Id)
+            </th>
+            <th>
+                <strong>Amount</strong>
+                @Html.DisplayNameFor(model => model.Amount)
+            </th>
         </tr>
     </thead>
     <tbody>
+@foreach (var item in Model)
+    {
         <tr>
-            <td></td>
-            <td></td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Id)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Amount)
+            </td>
         </tr>
+    }
     </tbody>
     <tfoot>
         <tr>
-            <td></td>
+            <td colspan="2">
+                <span style="cursor:pointer;">&larr;</span>
+                <span style="cursor:pointer;">&rarr;</span>
+            </td>
         </tr>
     </tfoot>
 </table>
