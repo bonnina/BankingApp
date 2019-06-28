@@ -52,11 +52,14 @@ namespace BankingApp.Controllers
             return View(_context.CheckingAccounts.ToList());
         }
 
-        public ActionResult Statement(int id)
+        public ActionResult Statement()
         {
-            var checkingAccount = _context.CheckingAccounts.Find(id);
+            var userId = User.FindFirst(ClaimTypes.NameIdentifier).Value;
+            var checkingAccount = _context.CheckingAccounts.Where(c => c.BankingAppUserId == userId).First();
 
-            return View(checkingAccount.Transactions.ToList());
+            return checkingAccount.Transactions.Any()
+                ? View(checkingAccount.Transactions.ToList())
+                : View();
         }
 
         // GET: CheckingAccount/Create
