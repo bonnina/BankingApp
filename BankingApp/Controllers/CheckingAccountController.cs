@@ -8,6 +8,7 @@ using BankingApp.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using System.Security.Claims;
+using Microsoft.EntityFrameworkCore;
 
 namespace BankingApp.Controllers
 {
@@ -55,11 +56,11 @@ namespace BankingApp.Controllers
         public ActionResult Statement()
         {
             var userId = User.FindFirst(ClaimTypes.NameIdentifier).Value;
-            var checkingAccount = _context.CheckingAccounts.Where(c => c.BankingAppUserId == userId).First();
+            var checkingAccount = _context.CheckingAccounts
+                .Include(c => c.Transactions)
+                .First(c => c.BankingAppUserId == userId);
 
-            return checkingAccount.Transactions.Any()
-                ? View(checkingAccount.Transactions.ToList())
-                : View();
+            return View(checkingAccount.Transactions.ToList());
         }
 
         // GET: CheckingAccount/Create
