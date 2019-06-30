@@ -29,7 +29,7 @@ namespace BankingApp.Controllers
         }
 
         // GET: CheckingAccount/Details/5
-        public ActionResult Details()
+        public ActionResult Balance()
         {
             var userId = User.FindFirst(ClaimTypes.NameIdentifier).Value;
 
@@ -43,7 +43,7 @@ namespace BankingApp.Controllers
         {
             var checkingAccount = _context.CheckingAccounts.Find(id);
 
-            return View("Details", checkingAccount);
+            return View("Balance", checkingAccount);
         }
 
         // GET: CheckingAccount/List
