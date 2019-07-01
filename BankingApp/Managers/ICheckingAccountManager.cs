@@ -1,8 +1,8 @@
 ﻿using System.Threading.Tasks;
 
-namespace BankingApp.Services
+namespace BankingApp.Managers
 {
-    public interface ICheckingAccountService
+    public interface ICheckingAccountManager
     {
         Task CreateCheckingAccount(string firstName, string lastName, string userId, decimal initialBalance = 0);
 

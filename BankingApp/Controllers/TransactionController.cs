@@ -2,7 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using BankingApp.Models;
 using Microsoft.AspNetCore.Authorization;
-using BankingApp.Services;
+using BankingApp.Managers;
 using BankingApp.Areas.Identity.Data;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -13,16 +13,16 @@ namespace BankingApp.Controllers
     public class TransactionController : Controller
     {
         private readonly BankingAppContext _context;
-        private readonly ICheckingAccountService _checkingAccountService;
+        private readonly ICheckingAccountManager _checkingAccountManager;
         private readonly UserManager<BankingAppUser> _userManager;
 
         public TransactionController(
             BankingAppContext context,
-             ICheckingAccountService checkingAccountService, 
+             ICheckingAccountManager checkingAccountManager, 
              UserManager<BankingAppUser> userManager)
         {
             _context = context;
-            _checkingAccountService = checkingAccountService;
+            _checkingAccountManager = checkingAccountManager;
             _userManager = userManager;
         }
 
@@ -56,7 +56,7 @@ namespace BankingApp.Controllers
                 
                 await _context.SaveChangesAsync();
 
-                await _checkingAccountService.UpdateBalance(transaction.CheckingAccountId); 
+                await _checkingAccountManager.UpdateBalance(transaction.CheckingAccountId); 
 
                 return RedirectToAction("Index", "Home");
             }

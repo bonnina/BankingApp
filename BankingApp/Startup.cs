@@ -10,7 +10,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using BankingApp.Areas.Identity.Data;
 using BankingApp.Models;
-using BankingApp.Services;
+using BankingApp.Managers;
 
 namespace BankingApp
 {
@@ -37,7 +37,7 @@ namespace BankingApp
 
             #region Dependency Injection
 
-            services.AddScoped<ICheckingAccountService, CheckingAccountService>();
+            services.AddScoped<ICheckingAccountManager, CheckingAccountManager>();
             services.AddScoped<Seed, Seed>();
 
             #endregion

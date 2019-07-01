@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using BankingApp.Areas.Identity.Data;
 using Microsoft.AspNetCore.Identity;
-using BankingApp.Services;
+using BankingApp.Managers;
 
 namespace BankingApp.Models
 {
@@ -13,16 +13,16 @@ namespace BankingApp.Models
     {
         private readonly UserManager<BankingAppUser> _userManager;
         private readonly RoleManager<IdentityRole> _roleManager;
-        private readonly ICheckingAccountService _checkingAccountService;
+        private readonly ICheckingAccountManager _checkingAccountManager;
         private readonly BankingAppContext _context;
 
-        public Seed (UserManager<BankingAppUser> userManager, 
-            ICheckingAccountService checkingAccountService,
+        public Seed (UserManager<BankingAppUser> userManager,
+            ICheckingAccountManager checkingAccountManager,
              BankingAppContext context,
             RoleManager<IdentityRole> roleManager)
         {
             _userManager = userManager;
-            _checkingAccountService = checkingAccountService;
+            _checkingAccountManager = checkingAccountManager;
             _context = context;
             _roleManager = roleManager;
         }
@@ -55,7 +55,7 @@ namespace BankingApp.Models
 
                     #endregion
 
-                    await _checkingAccountService.CreateCheckingAccount(user.FirstName, user.LastName, user.Id, 1000);
+                    await _checkingAccountManager.CreateCheckingAccount(user.FirstName, user.LastName, user.Id, 1000);
 
                     await _userManager.AddToRoleAsync(user, "Admin");
                 }

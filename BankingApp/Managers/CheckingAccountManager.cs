@@ -3,13 +3,13 @@ using BankingApp.Models;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace BankingApp.Services
+namespace BankingApp.Managers
 {
-    public class CheckingAccountService: ICheckingAccountService
+    public class CheckingAccountManager: ICheckingAccountManager
     {
         private readonly BankingAppContext _context;
 
-        public CheckingAccountService(BankingAppContext context)
+        public CheckingAccountManager(BankingAppContext context)
         {
             _context = context;
         }

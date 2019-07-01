@@ -8,7 +8,7 @@ using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.Extensions.Logging;
-using BankingApp.Services;
+using BankingApp.Managers;
 using System.Security.Claims;
 
 namespace BankingApp.Areas.Identity.Pages.Account
@@ -21,7 +21,7 @@ namespace BankingApp.Areas.Identity.Pages.Account
         private readonly RoleManager<IdentityRole> _roleManager;
         private readonly ILogger<RegisterModel> _logger;
         private readonly IEmailSender _emailSender;
-        private readonly ICheckingAccountService _checkingAccountService;
+        private readonly ICheckingAccountManager _checkingAccountManager;
 
         public RegisterModel(
             SignInManager<BankingAppUser> signInManager,
@@ -29,14 +29,14 @@ namespace BankingApp.Areas.Identity.Pages.Account
             RoleManager<IdentityRole> roleManager,
             ILogger<RegisterModel> logger,
             IEmailSender emailSender,
-            ICheckingAccountService checkingAccountService)
+            ICheckingAccountManager checkingAccountManager)
         {
             _signInManager = signInManager;
             _userManager = userManager;
             _roleManager = roleManager;
             _logger = logger;
             _emailSender = emailSender;
-            _checkingAccountService = checkingAccountService;
+            _checkingAccountManager = checkingAccountManager;
         }
 
         [BindProperty]
@@ -98,7 +98,7 @@ namespace BankingApp.Areas.Identity.Pages.Account
                     await _userManager.AddClaimAsync(user, 
                         new Claim(ClaimTypes.GivenName, Input.FirstName));
 
-                    await _checkingAccountService.CreateCheckingAccount(
+                    await _checkingAccountManager.CreateCheckingAccount(
                         Input.FirstName, 
                         Input.LastName, 
                         user.Id, 
