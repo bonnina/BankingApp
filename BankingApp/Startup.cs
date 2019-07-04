@@ -38,6 +38,7 @@ namespace BankingApp
             #region Dependency Injection
 
             services.AddScoped<ICheckingAccountManager, CheckingAccountManager>();
+            services.AddScoped<ITransactionManager, TransactionManager>();
             services.AddScoped<Seed, Seed>();
 
             #endregion
