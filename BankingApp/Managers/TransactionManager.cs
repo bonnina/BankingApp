@@ -14,8 +14,8 @@ namespace BankingApp.Managers
 
         public TransactionManager(
             BankingAppContext context,
-             ICheckingAccountManager checkingAccountManager,
-             UserManager<BankingAppUser> userManager)
+            ICheckingAccountManager checkingAccountManager,
+            UserManager<BankingAppUser> userManager)
         {
             _context = context;
             _checkingAccountManager = checkingAccountManager;

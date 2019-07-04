@@ -5,7 +5,6 @@ using Microsoft.AspNetCore.Authorization;
 using BankingApp.Managers;
 using BankingApp.Areas.Identity.Data;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.EntityFrameworkCore;
 
 namespace BankingApp.Controllers
 {
@@ -13,16 +12,16 @@ namespace BankingApp.Controllers
     public class TransactionController : Controller
     {
         private readonly BankingAppContext _context;
-        private readonly ICheckingAccountManager _checkingAccountManager;
+        private readonly ITransactionManager _transactionManager;
         private readonly UserManager<BankingAppUser> _userManager;
 
         public TransactionController(
             BankingAppContext context,
-             ICheckingAccountManager checkingAccountManager, 
+             ITransactionManager transactionManager,
              UserManager<BankingAppUser> userManager)
         {
             _context = context;
-            _checkingAccountManager = checkingAccountManager;
+            _transactionManager = transactionManager;
             _userManager = userManager;
         }
 
@@ -38,25 +37,9 @@ namespace BankingApp.Controllers
             var user = _userManager.FindByIdAsync(User.Identity.Name);
             var userId = _userManager.GetUserId(HttpContext.User);
 
-            var checkingAccount = (await _context.CheckingAccounts
-                .FirstAsync(c => c.BankingAppUserId == userId));
-
-            var checkingAccountId = checkingAccount.Id;
-
-            var transaction = new Transaction
-            {
-                Amount = amount,
-                CheckingAccountId = checkingAccountId,
-                CheckingAccount = checkingAccount
-            };
-
             if (ModelState.IsValid)
             {
-                _context.Transactions.Add(transaction);
-                
-                await _context.SaveChangesAsync();
-
-                await _checkingAccountManager.UpdateBalance(transaction.CheckingAccountId); 
+                await _transactionManager.CreateTransaction(amount, userId);
 
                 return RedirectToAction("Index", "Home");
             }
