@@ -46,5 +46,11 @@ namespace BankingApp.Controllers
 
             return View();
         }
+
+        [HttpPost]
+        public async Task<IActionResult> Withdraw(decimal amount)
+        {
+            return View();
+        }
     }
 }

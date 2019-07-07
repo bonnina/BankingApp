@@ -24,8 +24,8 @@ namespace BankingApp.Managers
 
         public async Task CreateTransaction(decimal amount, string userId)
         {
-            var checkingAccount = (await _context.CheckingAccounts
-                .FirstAsync(c => c.BankingAppUserId == userId));
+            var checkingAccount = await _context.CheckingAccounts
+                .FirstAsync(c => c.BankingAppUserId == userId);
 
             var checkingAccountId = checkingAccount.Id;
 
