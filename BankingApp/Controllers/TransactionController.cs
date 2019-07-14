@@ -48,6 +48,12 @@ namespace BankingApp.Controllers
             return View();
         }
 
+        // GET: Transaction/Withdraw
+        public IActionResult Withdraw()
+        {
+            return View();
+        }
+
         [HttpPost]
         public async Task<IActionResult> Withdraw(decimal amount)
         {
@@ -59,7 +65,7 @@ namespace BankingApp.Controllers
 
             decimal balance = account.Balance;
 
-            if (amount >= balance)
+            if (amount <= balance)
             {
 
                 if (ModelState.IsValid)
