@@ -76,12 +76,53 @@ namespace BankingApp.Controllers
                 }
 
                 return View();
-            } else
+            }
+            else
             {
                 ViewData["ErrMessage"] = "Insufficient funds";
 
                 return View();
             }
         }
+
+        // GET: Transaction/Transfer
+        public IActionResult Transfer()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Transfer(string toAccount, decimal amount)
+        {
+            var user = _userManager.FindByIdAsync(User.Identity.Name);
+            var userId = _userManager.GetUserId(HttpContext.User);
+
+            CheckingAccount account = await _context.CheckingAccounts
+                .FirstAsync(c => c.BankingAppUserId == userId);
+
+            decimal balance = account.Balance;
+
+            if (amount <= balance)
+            {
+
+                if (ModelState.IsValid)
+                {
+                    await _transactionManager.CreateTransaction(-System.Math.Abs(amount), userId);
+
+                    await _transactionManager.CreateTransaction(amount, toAccount);
+
+                    return RedirectToAction("Index", "Home");
+                }
+
+                return View();
+            }
+            else
+            {
+                ViewData["ErrMessage"] = "Insufficient funds";
+
+                return View();
+            }
+        }
+            
     }
 }
