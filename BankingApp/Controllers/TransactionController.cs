@@ -92,7 +92,7 @@ namespace BankingApp.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Transfer(string accountNumber, decimal amount)
+        public async Task<IActionResult> Transfer(int accountNumber, decimal amount)
         {
             var user = _userManager.FindByIdAsync(User.Identity.Name);
             var userId = _userManager.GetUserId(HttpContext.User);
@@ -109,7 +109,7 @@ namespace BankingApp.Controllers
                 {
                     await _transactionManager.CreateTransaction(-System.Math.Abs(amount), userId);
 
-                    await _transactionManager.CreateTransaction(System.Math.Abs(amount), accountNumber);
+                    await _transactionManager.CreateTransaction(System.Math.Abs(amount), accountNumber.ToString());
 
                     return RedirectToAction("Index", "Home");
                 }
