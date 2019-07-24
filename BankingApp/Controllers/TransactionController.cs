@@ -94,6 +94,13 @@ namespace BankingApp.Controllers
         [HttpPost]
         public async Task<IActionResult> Transfer(int accountNumber, decimal amount)
         {
+            if (!await _context.CheckingAccounts.AnyAsync(c => c.Id == accountNumber))
+            {
+                ViewData["ErrMessage"] = "Account number does not exist";
+
+                return View();
+            }
+
             var user = _userManager.FindByIdAsync(User.Identity.Name);
             var userId = _userManager.GetUserId(HttpContext.User);
 
