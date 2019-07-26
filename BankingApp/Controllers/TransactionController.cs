@@ -14,15 +14,18 @@ namespace BankingApp.Controllers
     {
         private readonly BankingAppContext _context;
         private readonly ITransactionManager _transactionManager;
+        private readonly ICheckingAccountManager _checkingAccountManager;
         private readonly UserManager<BankingAppUser> _userManager;
 
         public TransactionController(
             BankingAppContext context,
              ITransactionManager transactionManager,
+             ICheckingAccountManager checkingAccountManager,
              UserManager<BankingAppUser> userManager)
         {
             _context = context;
             _transactionManager = transactionManager;
+            _checkingAccountManager = checkingAccountManager;
             _userManager = userManager;
         }
 
@@ -94,7 +97,7 @@ namespace BankingApp.Controllers
         [HttpPost]
         public async Task<IActionResult> Transfer(int accountNumber, decimal amount)
         {
-            if (!await _context.CheckingAccounts.AnyAsync(c => c.Id == accountNumber))
+            if (!await _checkingAccountManager.AccountExists(accountNumber))
             {
                 ViewData["ErrMessage"] = "Account number does not exist";
 
