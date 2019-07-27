@@ -49,9 +49,9 @@ namespace BankingApp.Managers
             await _context.SaveChangesAsync();
         }
 
-        public async Task<bool> AccountExists(int accountNumber)
+        public async Task<bool> AccountExists(int checkingAccountId)
         {
-            if (!await _context.CheckingAccounts.AnyAsync(c => c.Id == accountNumber))
+            if (!await _context.CheckingAccounts.AnyAsync(c => c.Id == checkingAccountId))
             { 
                 return false;
             }

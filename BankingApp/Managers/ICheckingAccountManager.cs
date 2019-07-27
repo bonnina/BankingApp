@@ -8,6 +8,6 @@ namespace BankingApp.Managers
 
         Task UpdateBalance(int checkingAccountId);
 
-        Task<bool> AccountExists(int accountNumber);
+        Task<bool> AccountExists(int checkingAccountId);
     }
 }
