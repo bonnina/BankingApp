@@ -95,9 +95,9 @@ namespace BankingApp.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Transfer(int accountNumber, decimal amount)
+        public async Task<IActionResult> Transfer(int checkingAccountId, decimal amount)
         {
-            if (!await _checkingAccountManager.AccountExists(accountNumber))
+            if (!await _checkingAccountManager.AccountExists(3))
             {
                 ViewData["ErrMessage"] = "Account number does not exist";
 
@@ -119,7 +119,7 @@ namespace BankingApp.Controllers
                 {
                     await _transactionManager.CreateTransaction(-System.Math.Abs(amount), userId);
 
-                    await _transactionManager.CreateTransaction(System.Math.Abs(amount), accountNumber.ToString());
+                    await _transactionManager.CreateTransaction(System.Math.Abs(amount), 3.ToString());
 
                     return RedirectToAction("Index", "Home");
                 }
