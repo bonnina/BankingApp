@@ -25,23 +25,14 @@ namespace BankingApp.Managers
 
         public async Task CreateTransaction(decimal amount, string userId)
         {
-            var checkingAccount = await _context.CheckingAccounts
+            CheckingAccount checkingAccount = await _context.CheckingAccounts
                 .FirstAsync(c => c.BankingAppUserId == userId);
 
-            var checkingAccountId = checkingAccount.Id;
+            await this.PrepareTransaction(amount, checkingAccount.Id);
 
-            var transaction = new Transaction
-            {
-                Amount = amount,
-                CheckingAccountId = checkingAccountId,
-                CheckingAccount = checkingAccount
-            };
-            
-            _context.Transactions.Add(transaction);
+            await _checkingAccountManager.UpdateBalance(amount, checkingAccount.Id);
 
             await _context.SaveChangesAsync();
-
-            await _checkingAccountManager.UpdateBalance(transaction.CheckingAccountId);
         }
 
         public async Task PrepareTransaction(decimal amount, int checkingAccountId)
@@ -59,39 +50,16 @@ namespace BankingApp.Managers
             _context.Transactions.Add(transaction);
         }
 
-        public async Task TransferFunds(decimal amount, string userId, int checkingAccountId)
+        public async Task TransferFunds(decimal amount, int senderAccountId, int recipientAccountId)
         {
-            CheckingAccount senderAccount = await _context.CheckingAccounts
-                .FirstAsync(c => c.BankingAppUserId == userId);
+            decimal positiveAmount = System.Math.Abs(amount);
+            decimal negativeAmount = -System.Math.Abs(amount);
 
-            var senderTransaction = new Transaction
-            {
-                Amount = -System.Math.Abs(amount),
-                CheckingAccountId = senderAccount.Id,
-                CheckingAccount = senderAccount
-            };
+            await this.PrepareTransaction(negativeAmount, senderAccountId);
+            await _checkingAccountManager.UpdateBalance(negativeAmount, senderAccountId);
 
-            _context.Transactions.Add(senderTransaction);
-
-            senderAccount.Balance = await _context.Transactions
-                .Where(c => c.CheckingAccountId == senderAccount.Id)
-                .SumAsync(c => c.Amount);
-            
-            CheckingAccount recipientAccount = await _context.CheckingAccounts
-                .FirstAsync(c => c.Id == checkingAccountId);
-
-            var recipientTransaction = new Transaction
-            {
-                Amount = System.Math.Abs(amount),
-                CheckingAccountId = recipientAccount.Id,
-                CheckingAccount = recipientAccount
-            };
-
-            _context.Transactions.Add(recipientTransaction);
-
-            recipientAccount.Balance = await _context.Transactions
-                .Where(c => c.CheckingAccountId == recipientAccount.Id)
-                .SumAsync(c => c.Amount);
+            await this.PrepareTransaction(positiveAmount, recipientAccountId);
+            await _checkingAccountManager.UpdateBalance(positiveAmount, recipientAccountId);
 
             await _context.SaveChangesAsync();
         }
