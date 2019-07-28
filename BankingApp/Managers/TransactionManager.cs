@@ -3,7 +3,6 @@ using BankingApp.Models;
 using BankingApp.Areas.Identity.Data;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-using System.Linq;
 
 namespace BankingApp.Managers
 {
