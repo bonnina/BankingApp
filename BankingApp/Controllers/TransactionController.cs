@@ -114,24 +114,21 @@ namespace BankingApp.Controllers
 
             if (amount <= balance)
             {
-
-                if (ModelState.IsValid)
-                {
-                    await _transactionManager.CreateTransaction(-System.Math.Abs(amount), userId);
-
-                    await _transactionManager.CreateTransaction(System.Math.Abs(amount), 3.ToString());
-
-                    return RedirectToAction("Index", "Home");
-                }
-
-                return View();
-            }
-            else
-            {
                 ViewData["ErrMessage"] = "Insufficient funds";
 
                 return View();
             }
+
+            if (ModelState.IsValid)
+            {
+                await _transactionManager.CreateTransaction(-System.Math.Abs(amount), userId);
+
+                await _transactionManager.CreateTransaction(System.Math.Abs(amount), checkingAccountId.ToString());
+
+                return RedirectToAction("Index", "Home");
+            }
+
+            return View();
         }
             
     }
