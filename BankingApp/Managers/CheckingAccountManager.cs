@@ -37,16 +37,14 @@ namespace BankingApp.Managers
             await _context.SaveChangesAsync();
         }
 
-        public async Task UpdateBalance(int checkingAccountId)
+        public async Task UpdateBalance(decimal amount, int checkingAccountId)
         {
             CheckingAccount checkingAccount = await _context.CheckingAccounts
                 .FirstAsync(c => c.Id == checkingAccountId);
 
-            checkingAccount.Balance = await _context.Transactions
-                .Where(c => c.CheckingAccountId == checkingAccountId)
-                .SumAsync(c => c.Amount);
+            checkingAccount.Balance += amount;
 
-            await _context.SaveChangesAsync();
+            // await _context.SaveChangesAsync();
         }
 
         public async Task<bool> AccountExists(int checkingAccountId)

@@ -6,7 +6,7 @@ namespace BankingApp.Managers
     {
         Task CreateCheckingAccount(string firstName, string lastName, string userId, decimal initialBalance = 0);
 
-        Task UpdateBalance(int checkingAccountId);
+        Task UpdateBalance(decimal amount, int checkingAccountId);
 
         Task<bool> AccountExists(int checkingAccountId);
     }
