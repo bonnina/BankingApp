@@ -97,7 +97,7 @@ namespace BankingApp.Controllers
         [HttpPost]
         public async Task<IActionResult> Transfer(int checkingAccountId, decimal amount)
         {
-            if (!await _checkingAccountManager.AccountExists(3))
+            if (!await _checkingAccountManager.AccountExists(checkingAccountId))
             {
                 ViewData["ErrMessage"] = "Account number does not exist";
 
