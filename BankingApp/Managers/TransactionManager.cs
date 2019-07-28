@@ -44,6 +44,21 @@ namespace BankingApp.Managers
             await _checkingAccountManager.UpdateBalance(transaction.CheckingAccountId);
         }
 
+        public async Task PrepareTransaction(decimal amount, int checkingAccountId)
+        {
+            CheckingAccount account = await _context.CheckingAccounts
+                .FirstAsync(c => c.Id == checkingAccountId);
+
+            Transaction transaction = new Transaction
+            {
+                Amount = amount,
+                CheckingAccountId = account.Id,
+                CheckingAccount = account
+            };
+
+            _context.Transactions.Add(transaction);
+        }
+
         public async Task TransferFunds(decimal amount, string userId, int checkingAccountId)
         {
             CheckingAccount senderAccount = await _context.CheckingAccounts
