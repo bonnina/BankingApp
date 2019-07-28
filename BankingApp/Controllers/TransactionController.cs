@@ -100,7 +100,6 @@ namespace BankingApp.Controllers
             if (!await _checkingAccountManager.AccountExists(checkingAccountId))
             {
                 ViewData["ErrMessage"] = "Account number does not exist";
-
                 return View();
             }
 
@@ -112,18 +111,15 @@ namespace BankingApp.Controllers
 
             decimal balance = account.Balance;
 
-            if (amount <= balance)
+            if (amount > balance)
             {
                 ViewData["ErrMessage"] = "Insufficient funds";
-
                 return View();
             }
 
             if (ModelState.IsValid)
             {
-                await _transactionManager.CreateTransaction(-System.Math.Abs(amount), userId);
-
-                await _transactionManager.CreateTransaction(System.Math.Abs(amount), checkingAccountId.ToString());
+                await _transactionManager.TransferFunds(amount, account.Id, checkingAccountId);
 
                 return RedirectToAction("Index", "Home");
             }
