@@ -68,24 +68,20 @@ namespace BankingApp.Controllers
 
             decimal balance = account.Balance;
 
-            if (amount <= balance)
-            {
-
-                if (ModelState.IsValid)
-                {
-                    await _transactionManager.CreateTransaction(-System.Math.Abs(amount), userId);
-
-                    return RedirectToAction("Index", "Home");
-                }
-
-                return View();
-            }
-            else
+            if (amount > balance)
             {
                 ViewData["ErrMessage"] = "Insufficient funds";
-
                 return View();
             }
+
+            if (ModelState.IsValid)
+            {
+                await _transactionManager.CreateTransaction(-System.Math.Abs(amount), userId);
+
+                return RedirectToAction("Index", "Home");
+            }
+
+            return View();
         }
 
         // GET: Transaction/Transfer
