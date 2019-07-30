@@ -7,7 +7,7 @@
         <a href="@Url.Action("Withdraw", "Transaction")" class="btn btn-primary btn-large btn-block">
             Withdrawal
         </a>
-        <a href="#" class="btn btn-primary btn-large btn-block">
+        <a href="#" id="cash" class="btn btn-primary btn-large btn-block">
             Quick Cash $100
         </a>
         <a href="@Url.Action("Balance", "CheckingAccount")" class="btn btn-primary btn-large btn-block">
@@ -24,22 +24,21 @@
         <a href="@Url.Action("Deposit", "Transaction",
                 new { checkingAccountId = ViewData["CheckingAccountId"] })"
            class="btn btn-primary btn-large btn-block">
-           Deposit
+            Deposit
         </a>
     </div>
+    <p id="message"></p>
 </div>
 
-<!--
-<div class="text-center">
-    <div class="wrapper">
-        <div class="box">
-            <form>
-                <input placeholder="XXXX-XXXX-XXXX-XXXX" name="number" type="number" />
-                <input placeholder="PIN" type="number" />
-                <button class="submit">log in</button>
-            </form>
-            <a class="link" href="#">no account?  <span class="signup-link">register </span></a>
-        </div>
-    </div>
-</div>
--->
+@section scripts {
+    <script type="text/jscript">
+        $("#cash").click(function (e) {
+            e.preventDefault();
+
+            var url = "/Transaction/Withdraw";
+            $.get(url, null, function (data) {
+                $("#message").html(data);
+            });  
+        });
+    </script>
+}
