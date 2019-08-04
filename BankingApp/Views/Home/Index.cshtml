@@ -35,7 +35,7 @@
         $("#cash").click(function (e) {
             e.preventDefault();
 
-            var url = "/Transaction/Withdraw";
+            var url = "/Transaction/QuickCash";
             $.get(url, null, function (data) {
                 $("#message").html(data);
             });  
