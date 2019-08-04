@@ -124,8 +124,9 @@ namespace BankingApp.Controllers
         }
 
         // GET: Transaction/QuickCash
-        public async Task<IActionResult> QuickCash(decimal amount = 100)
+        public async Task<string> QuickCash()
         {
+            decimal amount = 100;
             var user = _userManager.FindByIdAsync(User.Identity.Name);
             var userId = _userManager.GetUserId(HttpContext.User);
 
@@ -136,18 +137,17 @@ namespace BankingApp.Controllers
 
             if (amount > balance)
             {
-                ViewData["ErrMessage"] = "Insufficient funds";
-                return View();
+                return "Insufficient funds";
             }
 
             if (ModelState.IsValid)
             {
-                await _transactionManager.CreateTransaction(-System.Math.Abs(amount), userId);
+                await _transactionManager.CreateTransaction(-amount, userId);
 
-                return RedirectToAction("Index", "Home");
+                return "Success!";
             }
 
-            return View();
+            return "Error";
         }
     }
 }
