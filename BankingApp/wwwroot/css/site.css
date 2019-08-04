@@ -29,6 +29,7 @@ textarea {
 
 /* Homescreen styles
 -------------------------------------------------- */
+
 .menu-buttons .btn {
     margin-top: 30px;
     background-color: darkgray;
@@ -45,13 +46,21 @@ a.btn {
 }
 
 .btn:hover,
-.btn:active {
-    background-color: #9999ff;
-    color: white;
+.btn:active,
+.btn:after {
+    background-color: #9494b8;
+    outline: none;
+}
+
+#message {
+    margin: 25px;
+    padding-left: 35%;
+    font-size: 27px;
+    color: #9494b8;
+    font-family: 'Fredoka One', cursive;
 }
 /* Homescreen styles
 -------------------------------------------------- */
-
 /* Sticky footer styles
 -------------------------------------------------- */
 html {
