@@ -36,7 +36,7 @@
             e.preventDefault();
 
             var url = "/Transaction/QuickCash";
-            $.get(url, null, function (data) {
+            $.post(url, null, function (data) {
                 $("#message").html(data);
             });  
         });

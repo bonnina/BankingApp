@@ -123,7 +123,7 @@ namespace BankingApp.Controllers
             return View();
         }
 
-        // GET: Transaction/QuickCash
+        // POST: Transaction/QuickCash
         public async Task<string> QuickCash()
         {
             decimal amount = 100;
