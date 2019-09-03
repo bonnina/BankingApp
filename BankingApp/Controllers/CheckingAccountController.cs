@@ -1,12 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using BankingApp.Models;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Identity;
 using System.Security.Claims;
 using Microsoft.EntityFrameworkCore;
 
@@ -29,11 +26,11 @@ namespace BankingApp.Controllers
         }
 
         // GET: CheckingAccount/Details/5
-        public ActionResult Balance()
+        public async Task<ActionResult> Balance()
         {
             var userId = User.FindFirst(ClaimTypes.NameIdentifier).Value;
 
-            var checkingAccount = _context.CheckingAccounts.Where(c => c.BankingAppUserId == userId).First();
+            CheckingAccount checkingAccount = await _context.CheckingAccounts.FirstAsync(c => c.BankingAppUserId == userId);
 
             return View(checkingAccount);
         }
@@ -41,7 +38,7 @@ namespace BankingApp.Controllers
         [Authorize(Roles = "Admin")]
         public ActionResult DetailsForAdmin(int id)
         {
-            var checkingAccount = _context.CheckingAccounts.Find(id);
+            CheckingAccount checkingAccount = _context.CheckingAccounts.Find(id);
 
             return View("Balance", checkingAccount);
         }
@@ -56,7 +53,7 @@ namespace BankingApp.Controllers
         public ActionResult Statement()
         {
             var userId = User.FindFirst(ClaimTypes.NameIdentifier).Value;
-            var checkingAccount = _context.CheckingAccounts
+            CheckingAccount checkingAccount = _context.CheckingAccounts
                 .Include(c => c.Transactions)
                 .First(c => c.BankingAppUserId == userId);
 
