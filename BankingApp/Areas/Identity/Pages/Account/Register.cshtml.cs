@@ -18,7 +18,7 @@ namespace BankingApp.Areas.Identity.Pages.Account
     {
         private readonly SignInManager<BankingAppUser> _signInManager;
         private readonly UserManager<BankingAppUser> _userManager;
-        private readonly RoleManager<IdentityRole> _roleManager;
+     //   private readonly RoleManager<IdentityRole> _roleManager;
         private readonly ILogger<RegisterModel> _logger;
         private readonly IEmailSender _emailSender;
         private readonly ICheckingAccountManager _checkingAccountManager;
@@ -33,7 +33,7 @@ namespace BankingApp.Areas.Identity.Pages.Account
         {
             _signInManager = signInManager;
             _userManager = userManager;
-            _roleManager = roleManager;
+        //    _roleManager = roleManager;
             _logger = logger;
             _emailSender = emailSender;
             _checkingAccountManager = checkingAccountManager;

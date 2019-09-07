@@ -10,7 +10,6 @@ namespace BankingApp.Managers
     {
         private readonly BankingAppContext _context;
         private readonly ICheckingAccountManager _checkingAccountManager;
-        private readonly UserManager<BankingAppUser> _userManager;
 
         public TransactionManager(
             BankingAppContext context,
@@ -19,7 +18,6 @@ namespace BankingApp.Managers
         {
             _context = context;
             _checkingAccountManager = checkingAccountManager;
-            _userManager = userManager;
         }
 
         public async Task CreateTransaction(decimal amount, string userId)

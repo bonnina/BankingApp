@@ -30,7 +30,7 @@ namespace BankingApp.Controllers
         }
 
         // GET: Transaction/Deposit
-        public IActionResult Deposit(int CheckingAccountId)
+        public IActionResult Deposit(int checkingAccountId)
         {
             return View();
         }
@@ -38,7 +38,6 @@ namespace BankingApp.Controllers
         [HttpPost]
         public async Task<IActionResult> Deposit(decimal amount)
         {
-            var user = _userManager.FindByIdAsync(User.Identity.Name);
             var userId = _userManager.GetUserId(HttpContext.User);
 
             if (ModelState.IsValid)
@@ -60,7 +59,6 @@ namespace BankingApp.Controllers
         [HttpPost]
         public async Task<IActionResult> Withdraw(decimal amount = 100)
         {
-            var user = _userManager.FindByIdAsync(User.Identity.Name);
             var userId = _userManager.GetUserId(HttpContext.User);
 
             CheckingAccount account = await _context.CheckingAccounts

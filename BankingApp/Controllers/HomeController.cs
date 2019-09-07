@@ -26,7 +26,7 @@ namespace BankingApp.Controllers
         [Authorize]
         public async Task<IActionResult> Index()
         {
-            var user = _userManager.FindByIdAsync(User.Identity.Name);
+          //  var user = _userManager.FindByIdAsync(User.Identity.Name);
             var userId = _userManager.GetUserId(HttpContext.User);
 
             var checkingAccountId = (await _context.CheckingAccounts

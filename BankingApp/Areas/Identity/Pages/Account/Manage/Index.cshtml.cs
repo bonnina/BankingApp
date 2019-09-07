@@ -1,7 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.Linq;
 using System.Text.Encodings.Web;
 using System.Threading.Tasks;
 using BankingApp.Areas.Identity.Data;
@@ -12,7 +10,7 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 
 namespace BankingApp.Areas.Identity.Pages.Account.Manage
 {
-    public partial class IndexModel : PageModel
+    public class IndexModel : PageModel
     {
         private readonly UserManager<BankingAppUser> _userManager;
         private readonly SignInManager<BankingAppUser> _signInManager;
@@ -156,7 +154,7 @@ namespace BankingApp.Areas.Identity.Pages.Account.Manage
             var callbackUrl = Url.Page(
                 "/Account/ConfirmEmail",
                 pageHandler: null,
-                values: new { userId = userId, code = code },
+                values: new { userId, code },
                 protocol: Request.Scheme);
             await _emailSender.SendEmailAsync(
                 email,

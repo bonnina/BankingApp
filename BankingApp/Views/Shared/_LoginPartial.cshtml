@@ -1,11 +1,11 @@
 @using Microsoft.AspNetCore.Identity
 @using BankingApp.Areas.Identity.Data
 @using System.Security.Claims
-@inject SignInManager<BankingAppUser> signInManager
-@inject UserManager<BankingAppUser> userManager
+@inject SignInManager<BankingAppUser> SignInManager
+@inject UserManager<BankingAppUser> UserManager
 
 <ul class="navbar-nav">
-@if (signInManager.IsSignedIn(User))
+@if (SignInManager.IsSignedIn(User))
 {
     var userName = User.FindFirst(ClaimTypes.Name).Value;
 
