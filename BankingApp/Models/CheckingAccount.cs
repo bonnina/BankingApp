@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using BankingApp.Areas.Identity.Data;
 
 namespace BankingApp.Models
@@ -28,6 +29,7 @@ namespace BankingApp.Models
             } }
 
         [DataType(DataType.Currency)]
+        [Column(TypeName = "decimal(18,2)")]
         public decimal Balance { get; set; }
 
         public virtual BankingAppUser User { get; set; }
